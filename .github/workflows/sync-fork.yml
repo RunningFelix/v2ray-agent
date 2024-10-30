@@ -1,0 +1,26 @@
+name: Sync Fork
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'  # 每周日零点运行一次
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      with:
+        repository: mack-a/v2ray-agent  # 上游仓库
+        path: upstream
+
+    - name: Sync Fork
+      run: |
+        git config user.name "YourGitHubUsername"  # 替换为你的 GitHub 用户名
+        git remote add upstream https://github.com/mack-a/v2ray-agent.git  # 上游仓库地址
+        git fetch upstream
+        git checkout master  # 确保在正确的分支
+        git merge upstream/master
+        git push origin master  # 推送到你的 fork
