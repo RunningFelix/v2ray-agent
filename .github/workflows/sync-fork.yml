@@ -13,13 +13,14 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
       with:
-        repository: mack-a/v2ray-agent  # 上游仓库
-        path: upstream
+        fetch-depth: 0  # 确保获取所有历史记录
+
+    - name: Add upstream remote
+      run: |
+        git remote add upstream https://github.com/mack-a/v2ray-agent.git
 
     - name: Sync Fork
       run: |
-        git config user.name "RunningFelix"  # 替换为你的 GitHub 用户名
-        git remote add upstream https://github.com/mack-a/v2ray-agent.git  # 上游仓库地址
         git fetch upstream
         git checkout master  # 确保在正确的分支
         git merge upstream/master
